@@ -49,6 +49,7 @@
             justify-content: center;
             font-size: 1.5em;
             font-weight: bold;
+            cursor: pointer;
         }
 
         .user-info {
@@ -162,177 +163,6 @@
             }
         }
 
-        .section:nth-child(1) { animation-delay: 0.8s; }
-        .section:nth-child(2) { animation-delay: 1.0s; }
-        .section:nth-child(3) { animation-delay: 1.2s; }
-
-        input[type="checkbox"], input[type="text"], input[type="number"] {
-            margin: 15px 0;
-            padding: 20px 25px;
-            border: none;
-            border-radius: 20px;
-            width: 100%;
-            font-size: 1.2em;
-            background: rgba(255, 255, 255, 0.12);
-            color: #ffffff;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            border: 2px solid rgba(255, 215, 0, 0.3);
-            backdrop-filter: blur(10px);
-        }
-
-        input::placeholder {
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        input:focus {
-            outline: none;
-            border-color: #ffd700;
-            box-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
-            transform: translateY(-3px);
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-        input[type="checkbox"] {
-            width: 28px;
-            height: 28px;
-            margin-right: 15px;
-            accent-color: #ffd700;
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .checkbox-label {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 20px 0;
-            font-size: 1.3em;
-            font-weight: 400;
-            text-shadow: 0 2px 8px rgba(0,0,0,0.9);
-            color: #e0e0e0;
-        }
-
-        button {
-            background: linear-gradient(135deg, #ffd700 0%, #ff6b6b 50%, #4ecdc4 100%);
-            border: none;
-            padding: 22px 40px;
-            border-radius: 60px;
-            color: #000;
-            font-size: 1.3em;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin: 18px 0;
-            width: 100%;
-            box-shadow: 0 10px 35px rgba(255, 215, 0, 0.5);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            position: relative;
-            overflow: hidden;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-        }
-
-        button:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 15px 45px rgba(255, 215, 0, 0.7);
-            background: linear-gradient(135deg, #ffed4e 0%, #ff8a8a 50%, #5edfd8 100%);
-        }
-
-        button:active {
-            transform: translateY(0);
-        }
-
-        .profile-info {
-            background: linear-gradient(135deg, rgba(255,215,0,0.15) 0%, rgba(255,107,107,0.1) 100%);
-            padding: 30px;
-            border-radius: 25px;
-            margin: 30px 0;
-            border: 2px solid rgba(255, 215, 0, 0.2);
-            backdrop-filter: blur(15px);
-        }
-
-        .balance {
-            font-size: 3em;
-            font-weight: 900;
-            margin: 20px 0;
-            background: linear-gradient(45deg, #ffd700, #4ecdc4);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 5px 25px rgba(255, 215, 0, 0.4);
-        }
-
-        .thank-you {
-            font-size: 1.2em;
-            color: #ffd700;
-            margin-top: 30px;
-            font-style: italic;
-            font-weight: 400;
-            text-shadow: 0 2px 8px rgba(0,0,0,0.9);
-        }
-
-        .emoji {
-            font-size: 1.8em;
-            margin: 0 8px;
-            filter: drop-shadow(0 3px 8px rgba(0,0,0,0.9));
-        }
-
-        .gold-text {
-            color: #ffd700;
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-        }
-
-        .diamond-effect {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .diamond {
-            position: absolute;
-            width: 8px;
-            height: 8px;
-            background: #ffd700;
-            border-radius: 2px;
-            animation: floatDiamond 6s ease-in-out infinite;
-        }
-
-        @keyframes floatDiamond {
-            0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0; }
-            50% { transform: translateY(-20px) rotate(180deg); opacity: 1; }
-        }
-
-        .glitter {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: #fff;
-            border-radius: 50%;
-            animation: glitter 4s ease-in-out infinite;
-        }
-
-        @keyframes glitter {
-            0%, 100% { opacity: 0; transform: scale(0); }
-            50% { opacity: 1; transform: scale(1); }
-        }
-
-        .vip-badge {
-            position: absolute;
-            top: -15px;
-            right: -15px;
-            background: linear-gradient(45deg, #ffd700, #ff6b6b);
-            padding: 10px 20px;
-            border-radius: 25px;
-            font-weight: 700;
-            font-size: 0.9em;
-            transform: rotate(5deg);
-            box-shadow: 0 5px 20px rgba(255, 215, 0, 0.4);
-            z-index: 3;
-        }
-
         .cases-grid {
             display: grid;
             grid-template-columns: 1fr;
@@ -380,13 +210,6 @@
             margin: 10px 0;
         }
 
-        .case-chances {
-            font-size: 0.9em;
-            color: #e0e0e0;
-            margin: 8px 0;
-            line-height: 1.4;
-        }
-
         .case-animation {
             position: fixed;
             top: 0;
@@ -422,14 +245,72 @@
             0% { transform: scale(0); opacity: 0; }
             100% { transform: scale(1); opacity: 1; }
         }
+
+        .result-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .result-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .sell-btn {
+            background: #4ecdc4;
+            color: #000;
+        }
+
+        .withdraw-btn {
+            background: #ffd700;
+            color: #000;
+        }
+
+        .inventory-section {
+            display: none;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            position: absolute;
+            top: 70px;
+            right: 20px;
+            z-index: 1001;
+            min-width: 200px;
+        }
+
+        .inventory-item {
+            padding: 10px;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .item-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 0.8em;
+            cursor: pointer;
+        }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="diamond-effect" id="diamond-effect"></div>
-    
     <div class="user-header" id="user-header" style="display: none;">
-        <div class="user-avatar" id="user-avatar">👤</div>
+        <div class="user-avatar" id="user-avatar" onclick="toggleInventory()">👤</div>
         <div class="user-info">
             <div class="user-nickname" id="header-nickname"></div>
             <div class="user-balance">
@@ -438,17 +319,17 @@
             </div>
         </div>
     </div>
+
+    <div class="inventory-section" id="inventory-section">
+        <h3>🎒 Мой инвентарь</h3>
+        <div id="inventory-items">
+            <div class="inventory-item">Инвентарь пуст</div>
+        </div>
+    </div>
     
     <div class="container">
-        <div class="vip-badge">VIP CLUB</div>
         <div class="logo">🎰 ECASINO</div>
         
-        <div class="welcome-text">
-            Добро пожаловать в мир <span class="gold-text">эксклюзивных выигрышей</span>! 
-            <span class="emoji">✨</span><br>
-            Готовы испытать удачу и открыть <span class="gold-text">кейсы</span>?
-        </div>
-
         <div id="consent-section" class="section">
             <label class="checkbox-label">
                 <input type="checkbox" id="consent"> 
@@ -458,38 +339,18 @@
         </div>
 
         <div id="nickname-section" class="section" style="display:none;">
-            <div class="welcome-text">Отличный выбор! <span class="emoji">🎯</span></div>
             <input type="text" id="nickname" placeholder="Введите ваш игровой никнейм">
-            <button onclick="submitNickname()">СОХРАНИТЬ 💾</button>
+            <button onclick="submitNickname()">СОХРАНИТЬ</button>
         </div>
 
-        <div id="profile-section" class="section" style="display:none;">
-            <div class="profile-info">
-                <div class="welcome-text">Добро пожаловать, <span id="user-nick" class="gold-text"></span>! <span class="emoji">👋</span></div>
-                <div class="balance"><span id="user-balance">0</span> FC</div>
-                <div class="welcome-text">Удачи в открытиях! <span class="emoji">🎲</span></div>
-            </div>
-            <button onclick="showCases()">ОТКРЫТЬ КЕЙСЫ 🎁</button>
-            <button onclick="showInventory()">МОЙ ИНВЕНТАРЬ 🎒</button>
-            <button onclick="showWithdraw()">ВЫВОД ПРЕДМЕТОВ 📤</button>
-            <div class="thank-you">Спасибо, что выбрали ECasino! <span class="emoji">❤️</span></div>
-        </div>
-
-        <div id="cases-section" class="section" style="display:none;">
-            <div class="welcome-text">🎰 Выберите кейс для открытия</div>
+        <div id="main-section" class="section" style="display:none;">
             <div class="cases-grid">
                 <div class="case-item" onclick="openCase('fc-case')">
                     <img src="https://i.imgur.com/zg6IO6E.jpeg" alt="FC-CASE" class="case-image">
                     <div class="case-name">FC-CASE</div>
                     <div class="case-price">400 FC</div>
-                    <div class="case-chances">💎 100 FC - 30% шанс</div>
-                    <div class="case-chances">💎 300 FC - 25% шанс</div>
-                    <div class="case-chances">💎 450 FC - 25% шанс</div>
-                    <div class="case-chances">💎 500 FC - 15% шанс</div>
-                    <div class="case-chances">💎 1000 FC - 5% шанс</div>
                 </div>
             </div>
-            <button onclick="backToProfile()">НАЗАД ↩️</button>
         </div>
 
         <div id="deposit-section" class="section" style="display:none;">
@@ -497,45 +358,19 @@
             
             <input type="number" id="deposit-amount" placeholder="Введите сумму FC" oninput="calculateCommission()">
             
-            <div class="commission-info">
-                <div class="calculation">💡 Комиссия за пополнение: 2%</div>
-                <div class="calculation" id="commission-calculation"></div>
-                <div class="final-amount" id="final-amount"></div>
-            </div>
+            <div id="commission-calculation"></div>
+            <div id="final-amount"></div>
 
             <label class="checkbox-label">
                 <input type="checkbox" id="deposit-consent"> 
                 Я понимаю, что получу на баланс сумму за вычетом комиссии
             </label>
 
-            <button onclick="createDepositOrder()">СОЗДАТЬ ОРДЕР 📋</button>
-            <button onclick="backToProfile()" style="background: #6c757d;">НАЗАД ↩️</button>
+            <button onclick="createDepositOrder()">СОЗДАТЬ ОРДЕР</button>
+            <button onclick="backToMain()">НАЗАД</button>
         </div>
     </div>
 
     <script src="script.js"></script>
-    <script>
-        function createDiamondEffect() {
-            const effect = document.getElementById('diamond-effect');
-            for (let i = 0; i < 20; i++) {
-                const diamond = document.createElement('div');
-                diamond.className = 'diamond';
-                diamond.style.left = Math.random() * 100 + '%';
-                diamond.style.top = Math.random() * 100 + '%';
-                diamond.style.animationDelay = Math.random() * 6 + 's';
-                effect.appendChild(diamond);
-            }
-            for (let i = 0; i < 30; i++) {
-                const glitter = document.createElement('div');
-                glitter.className = 'glitter';
-                glitter.style.left = Math.random() * 100 + '%';
-                glitter.style.top = Math.random() * 100 + '%';
-                glitter.style.animationDelay = Math.random() * 4 + 's';
-                effect.appendChild(glitter);
-            }
-        }
-        
-        createDiamondEffect();
-    </script>
 </body>
 </html>
