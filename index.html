@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>ExclusiveCasino | EC</title>
+    <title>ECasino | EC</title>
     <meta charset="utf-8">
     <style>
         * {
@@ -11,59 +11,63 @@
         }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
+            font-family: 'Montserrat', 'Arial', sans-serif;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://i.imgur.com/mM5QRt9.gif');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
             min-height: 100vh;
-            color: white;
+            color: #ffffff;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             text-align: center;
             padding: 20px;
-        }
-
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            position: relative;
+            overflow-x: hidden;
         }
 
         .container {
             max-width: 500px;
             width: 100%;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 40px 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            z-index: 2;
         }
 
         .logo {
-            font-size: 3em;
-            font-weight: bold;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-            animation: glow 2s ease-in-out infinite alternate;
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1);
+            font-size: 3.5em;
+            font-weight: 800;
+            margin-bottom: 25px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #ff6b6b);
+            background-size: 300% 300%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            animation: gradientText 4s ease-in-out infinite;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
 
-        @keyframes glow {
-            from { text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #e60073; }
-            to { text-shadow: 0 0 20px #fff, 0 0 30px #ff4da6, 0 0 40px #ff4da6; }
+        @keyframes gradientText {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         .welcome-text {
-            font-size: 1.3em;
+            font-size: 1.4em;
             margin-bottom: 30px;
             line-height: 1.6;
             opacity: 0;
             animation: fadeIn 1s ease-in forwards 0.5s;
+            font-weight: 300;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
         }
 
         @keyframes fadeIn {
@@ -71,7 +75,7 @@
         }
 
         .section {
-            margin: 25px 0;
+            margin: 30px 0;
             opacity: 0;
             animation: slideUp 0.8s ease-out forwards;
         }
@@ -79,7 +83,7 @@
         @keyframes slideUp {
             from { 
                 opacity: 0;
-                transform: translateY(30px);
+                transform: translateY(40px);
             }
             to { 
                 opacity: 1;
@@ -92,48 +96,65 @@
         .section:nth-child(3) { animation-delay: 1.2s; }
 
         input[type="checkbox"], input[type="text"], input[type="number"] {
-            margin: 10px 0;
-            padding: 15px;
+            margin: 12px 0;
+            padding: 18px 20px;
             border: none;
-            border-radius: 10px;
+            border-radius: 15px;
             width: 100%;
-            font-size: 1em;
-            background: rgba(255, 255, 255, 0.9);
-            color: #333;
+            font-size: 1.1em;
+            background: rgba(255, 255, 255, 0.95);
+            color: #2c3e50;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #4ecdc4;
+            box-shadow: 0 0 20px rgba(78, 205, 196, 0.3);
+            transform: translateY(-2px);
         }
 
         input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            margin-right: 10px;
+            width: 24px;
+            height: 24px;
+            margin-right: 12px;
+            accent-color: #4ecdc4;
         }
 
         .checkbox-label {
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 15px 0;
-            font-size: 1.1em;
+            margin: 18px 0;
+            font-size: 1.2em;
+            font-weight: 400;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.7);
         }
 
         button {
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%);
             border: none;
-            padding: 15px 30px;
+            padding: 18px 35px;
             border-radius: 50px;
             color: white;
-            font-size: 1.1em;
-            font-weight: bold;
+            font-size: 1.2em;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            margin: 10px 0;
+            margin: 15px 0;
             width: 100%;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
         }
 
         button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(255, 107, 107, 0.6);
         }
 
         button:active {
@@ -141,85 +162,172 @@
         }
 
         .profile-info {
-            background: rgba(255, 255, 255, 0.15);
-            padding: 20px;
-            border-radius: 15px;
-            margin: 20px 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            padding: 25px;
+            border-radius: 20px;
+            margin: 25px 0;
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
         }
 
         .balance {
-            font-size: 2em;
-            font-weight: bold;
-            margin: 10px 0;
-            color: #4ecdc4;
+            font-size: 2.5em;
+            font-weight: 800;
+            margin: 15px 0;
+            background: linear-gradient(45deg, #4ecdc4, #45b7d1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 4px 15px rgba(78, 205, 196, 0.3);
         }
 
         .thank-you {
             font-size: 1.1em;
             color: #4ecdc4;
-            margin-top: 20px;
+            margin-top: 25px;
             font-style: italic;
+            font-weight: 300;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.7);
         }
 
         .emoji {
-            font-size: 1.5em;
-            margin: 0 5px;
+            font-size: 1.6em;
+            margin: 0 6px;
+            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.7));
         }
 
         .commission-info {
-            background: rgba(255, 193, 7, 0.2);
-            padding: 15px;
-            border-radius: 10px;
-            margin: 15px 0;
-            border-left: 4px solid #ffc107;
+            background: linear-gradient(135deg, rgba(255, 193, 7, 0.15) 0%, rgba(255, 193, 7, 0.1) 100%);
+            padding: 20px;
+            border-radius: 18px;
+            margin: 20px 0;
+            border-left: 5px solid #ffc107;
+            backdrop-filter: blur(10px);
         }
 
         .calculation {
-            font-size: 0.9em;
-            margin: 5px 0;
+            font-size: 1em;
+            margin: 8px 0;
             color: #ffc107;
+            font-weight: 500;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.7);
         }
 
         .final-amount {
-            font-size: 1.2em;
-            font-weight: bold;
+            font-size: 1.4em;
+            font-weight: 700;
             color: #4ecdc4;
+            margin: 12px 0;
+            text-shadow: 0 2px 10px rgba(78, 205, 196, 0.4);
+        }
+
+        .corner-decoration {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            border: 3px solid rgba(78, 205, 196, 0.3);
+            z-index: 1;
+        }
+
+        .corner-top-left {
+            top: -20px;
+            left: -20px;
+            border-right: none;
+            border-bottom: none;
+            border-radius: 25px 0 0 0;
+        }
+
+        .corner-top-right {
+            top: -20px;
+            right: -20px;
+            border-left: none;
+            border-bottom: none;
+            border-radius: 0 25px 0 0;
+        }
+
+        .corner-bottom-left {
+            bottom: -20px;
+            left: -20px;
+            border-right: none;
+            border-top: none;
+            border-radius: 0 0 0 25px;
+        }
+
+        .corner-bottom-right {
+            bottom: -20px;
+            right: -20px;
+            border-left: none;
+            border-top: none;
+            border-radius: 0 0 25px 0;
+        }
+
+        .glow-effect {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(78, 205, 196, 0.2) 0%, transparent 70%);
+            filter: blur(40px);
+            z-index: 1;
+            animation: pulseGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            from { opacity: 0.3; transform: scale(0.8); }
+            to { opacity: 0.6; transform: scale(1.2); }
+        }
+
+        .glow-1 { top: 10%; left: 10%; }
+        .glow-2 { bottom: 10%; right: 10%; }
+
+        .user-info {
+            font-size: 1.3em;
             margin: 10px 0;
+            font-weight: 500;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.8);
         }
     </style>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
+    <div class="glow-effect glow-1"></div>
+    <div class="glow-effect glow-2"></div>
+    
+    <div class="corner-decoration corner-top-left"></div>
+    <div class="corner-decoration corner-top-right"></div>
+    <div class="corner-decoration corner-bottom-left"></div>
+    <div class="corner-decoration corner-bottom-right"></div>
+
     <div class="container">
-        <div class="logo">🎰 ExclusiveCasino</div>
+        <div class="logo">🎰 ECasino</div>
         
         <div class="welcome-text">
-            Добро пожаловать в самый стильный казино-клуб! 
+            Добро пожаловать в мир азарта и больших выигрышей! 
             <span class="emoji">✨</span><br>
-            Готовы испытать удачу?
+            Готовы испытать удачу и открыть самые дорогие кейсы?
         </div>
 
         <div id="consent-section" class="section">
             <label class="checkbox-label">
                 <input type="checkbox" id="consent"> 
-                Я согласен, что могу проиграть внутриигровую валюту (FC)
+                Я согласен с правилами и понимаю риски
             </label>
-            <button onclick="acceptConsent()">Продолжить 🚀</button>
+            <button onclick="acceptConsent()">Начать игру 🚀</button>
         </div>
 
         <div id="nickname-section" class="section" style="display:none;">
-            <div class="welcome-text">Прекрасный выбор! <span class="emoji">🎯</span></div>
+            <div class="welcome-text">Отличный выбор! <span class="emoji">🎯</span></div>
             <input type="text" id="nickname" placeholder="Введите ваш игровой никнейм">
             <button onclick="submitNickname()">Сохранить 💾</button>
         </div>
 
         <div id="profile-section" class="section" style="display:none;">
             <div class="profile-info">
-                <div>Добро пожаловать, <span id="user-nick"></span>! <span class="emoji">👋</span></div>
+                <div class="user-info">Добро пожаловать, <span id="user-nick"></span>! <span class="emoji">👋</span></div>
                 <div class="balance"><span id="user-balance">0</span> FC</div>
-                <div>Удачной игры! <span class="emoji">🎲</span></div>
+                <div class="user-info">Удачи в открытиях! <span class="emoji">🎲</span></div>
             </div>
             <button onclick="showDepositForm()">Пополнить баланс 💰</button>
-            <div class="thank-you">Спасибо, что выбрали нас! <span class="emoji">❤️</span></div>
+            <button onclick="openCases()">Открыть кейсы 🎁</button>
+            <div class="thank-you">Спасибо, что выбрали ECasino! <span class="emoji">❤️</span></div>
         </div>
 
         <div id="deposit-section" class="section" style="display:none;">
