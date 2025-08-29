@@ -1,44 +1,56 @@
 let currentUser = null;
+let userBalance = 0;
 
 function acceptConsent() {
     const checkbox = document.getElementById("consent");
     if (checkbox.checked) {
         document.getElementById("consent-section").style.display = "none";
         document.getElementById("nickname-section").style.display = "block";
-        showNotification("Благодарим за согласие! Приятной игры в ECasino! 💫");
+        showNotification("🎉 Благодарим за согласие! Приятной игры в ECasino!");
     } else {
-        showNotification("Пожалуйста, подтвердите согласие для продолжения 🎯");
+        showNotification("⚠️ Пожалуйста, подтвердите согласие для продолжения");
     }
 }
 
 function submitNickname() {
-    const nickname = document.getElementById("nickname").value;
+    const nicknameInput = document.getElementById("nickname");
+    const nickname = nicknameInput.value.trim();
+    
     if (!nickname) {
-        showNotification("Введите ваш игровой никнейм ✏️");
+        showNotification("✏️ Введите ваш игровой никнейм");
+        nicknameInput.focus();
         return;
     }
+    
+    if (nickname.length < 3) {
+        showNotification("📝 Никнейм должен содержать минимум 3 символа");
+        nicknameInput.focus();
+        return;
+    }
+    
     currentUser = nickname;
     document.getElementById("nickname-section").style.display = "none";
     document.getElementById("profile-section").style.display = "block";
     document.getElementById("user-nick").innerText = nickname;
-    showNotification("Никнейм сохранен! Добро пожаловать в ECasino! 🎉");
+    
+    // Загружаем баланс (заглушка)
+    userBalance = 1000;
+    document.getElementById("user-balance").innerText = userBalance;
+    
+    showNotification("✅ Никнейм сохранен! Добро пожаловать в ECasino!");
 }
 
 function showDepositForm() {
-    document.getElementById("profile-section").style.display = "none";
-    document.getElementById("deposit-section").style.display = "block";
-    document.getElementById("deposit-amount").value = "";
-    document.getElementById("deposit-consent").checked = false;
-    calculateCommission();
-}
-
-function backToProfile() {
-    document.getElementById("deposit-section").style.display = "none";
-    document.getElementById("profile-section").style.display = "block";
+    // Здесь будет переход к форме пополнения
+    showNotification("💎 Функция пополнения скоро будет доступна!");
 }
 
 function openCases() {
-    showNotification("Раздел кейсов скоро будет доступен! 🎁");
+    showNotification("🎁 Раздел кейсов в разработке! Скоро будет доступен!");
+}
+
+function showInventory() {
+    showNotification("🎒 Ваш инвентарь скоро будет доступен!");
 }
 
 function calculateCommission() {
@@ -58,12 +70,12 @@ function createDepositOrder() {
     const consent = document.getElementById("deposit-consent").checked;
     
     if (!amount || amount <= 0) {
-        showNotification("Пожалуйста, введите корректную сумму 🔢");
+        showNotification("🔢 Пожалуйста, введите корректную сумму");
         return;
     }
     
     if (!consent) {
-        showNotification("Пожалуйста, подтвердите понимание комиссии ✅");
+        showNotification("✅ Пожалуйста, подтвердите понимание комиссии");
         return;
     }
     
@@ -76,25 +88,93 @@ function createDepositOrder() {
         `🎯 К зачислению: ${finalAmount} FC\n\n` +
         `⏳ Ожидайте подтверждения администратора!`
     );
-    
-    setTimeout(() => {
-        backToProfile();
-        showNotification("Администратор ECasino уведомлен! Спасибо за ожидание 🙏");
-    }, 3000);
 }
 
 function showNotification(message) {
-    if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
-        Telegram.WebApp.showPopup({
-            title: "ECasino",
-            message: message,
-            buttons: [{ type: "ok" }]
-        });
-    } else {
-        alert(message);
-    }
+    // Создаем красивый toast вместо alert
+    const toast = document.createElement('div');
+    toast.style.cssText = `
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.9);
+        color: #ffd700;
+        padding: 15px 25px;
+        border-radius: 15px;
+        border: 2px solid rgba(255, 215, 0, 0.3);
+        backdrop-filter: blur(10px);
+        z-index: 1000;
+        font-size: 1.1em;
+        font-weight: 500;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+        animation: slideIn 0.3s ease-out;
+    `;
+    
+    toast.innerHTML = message;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.style.animation = 'slideOut 0.3s ease-in';
+        setTimeout(() => document.body.removeChild(toast), 300);
+    }, 3000);
 }
 
+// Добавляем стили для анимации
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideIn {
+        from { transform: translate(-50%, -100px); opacity: 0; }
+        to { transform: translate(-50%, 0); opacity: 1; }
+    }
+    
+    @keyframes slideOut {
+        from { transform: translate(-50%, 0); opacity: 1; }
+        to { transform: translate(-50%, -100px); opacity: 0; }
+    }
+    
+    input::selection {
+        background: rgba(255, 215, 0, 0.3);
+        color: white;
+    }
+    
+    input::-webkit-input-placeholder {
+        color: rgba(255, 255, 255, 0.6);
+    }
+    
+    input:-moz-placeholder {
+        color: rgba(255, 255, 255, 0.6);
+    }
+    
+    input::-moz-placeholder {
+        color: rgba(255, 255, 255, 0.6);
+    }
+    
+    input:-ms-input-placeholder {
+        color: rgba(255, 255, 255, 0.6);
+    }
+`;
+document.head.appendChild(style);
+
+// Инициализация
 document.addEventListener('DOMContentLoaded', function() {
-    showNotification("Добро пожаловать в ECasino! 🎰");
+    // Фокус на поле ввода никнейма когда оно появляется
+    const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+                const nicknameSection = document.getElementById('nickname-section');
+                if (nicknameSection.style.display === 'block') {
+                    document.getElementById('nickname').focus();
+                }
+            }
+        });
+    });
+    
+    observer.observe(document.getElementById('nickname-section'), {
+        attributes: true,
+        attributeFilter: ['style']
+    });
+    
+    showNotification("🎰 Добро пожаловать в ECasino! Готовы к большим выигрышам?");
 });
