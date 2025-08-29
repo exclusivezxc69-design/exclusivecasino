@@ -114,11 +114,11 @@ function backToMain() {
 
 function calculateCommission() {
     const amount = parseInt(document.getElementById("deposit-amount").value) || 0;
-    const commission = Math.floor(amount * 0.02);
+    const commission = Math.floor(amount * 0.10);
     const finalAmount = amount - commission;
     
     document.getElementById("commission-calculation").innerHTML = 
-        `Комиссия: ${commission} FC (2%)`;
+        `Комиссия: ${commission} FC (10%)`;
     
     document.getElementById("final-amount").innerHTML = 
         `К зачислению: ${finalAmount} FC`;
@@ -138,7 +138,7 @@ function createDepositOrder() {
         return;
     }
     
-    const commission = Math.floor(amount * 0.02);
+    const commission = Math.floor(amount * 0.10);
     const finalAmount = amount - commission;
     
     showNotification(`Создан ордер на ${amount} FC. Ожидайте подтверждения.`);
