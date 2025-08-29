@@ -18,14 +18,81 @@
             background-attachment: fixed;
             min-height: 100vh;
             color: #ffffff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
             padding: 20px;
             position: relative;
             overflow-x: hidden;
+        }
+
+        .user-header {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(15px);
+            padding: 15px 20px;
+            border-radius: 20px;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ffd700, #4ecdc4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .user-nickname {
+            font-weight: 600;
+            color: #ffd700;
+            font-size: 1.1em;
+        }
+
+        .user-balance {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.1em;
+        }
+
+        .balance-amount {
+            font-weight: 700;
+            color: #4ecdc4;
+        }
+
+        .add-balance-btn {
+            background: rgba(255, 215, 0, 0.2);
+            border: 2px solid rgba(255, 215, 0, 0.5);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .add-balance-btn:hover {
+            background: rgba(255, 215, 0, 0.4);
+            transform: scale(1.1);
         }
 
         .container {
@@ -39,6 +106,7 @@
             border: 3px solid rgba(255, 215, 0, 0.3);
             position: relative;
             z-index: 2;
+            margin: 80px auto 40px;
         }
 
         .logo {
@@ -264,11 +332,112 @@
             box-shadow: 0 5px 20px rgba(255, 215, 0, 0.4);
             z-index: 3;
         }
+
+        .cases-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .case-item {
+            background: linear-gradient(135deg, rgba(255,215,0,0.1) 0%, rgba(255,107,107,0.08) 100%);
+            border: 3px solid rgba(255, 215, 0, 0.4);
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .case-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 45px rgba(255, 215, 0, 0.4);
+            border-color: #ffd700;
+        }
+
+        .case-image {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 15px;
+            border-radius: 15px;
+            border: 3px solid #ffd700;
+            box-shadow: 0 10px 25px rgba(255, 215, 0, 0.3);
+        }
+
+        .case-name {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: #ffd700;
+            margin: 10px 0;
+        }
+
+        .case-price {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #4ecdc4;
+            margin: 10px 0;
+        }
+
+        .case-chances {
+            font-size: 0.9em;
+            color: #e0e0e0;
+            margin: 8px 0;
+            line-height: 1.4;
+        }
+
+        .case-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            flex-direction: column;
+        }
+
+        .spinning-item {
+            font-size: 4em;
+            animation: spin 0.1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: translateY(100px) rotate(0deg); opacity: 0; }
+            50% { transform: translateY(0) rotate(180deg); opacity: 1; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+
+        .result-item {
+            font-size: 3em;
+            margin-top: 30px;
+            animation: reveal 1s ease-out;
+        }
+
+        @keyframes reveal {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="diamond-effect" id="diamond-effect"></div>
+    
+    <div class="user-header" id="user-header" style="display: none;">
+        <div class="user-avatar" id="user-avatar">👤</div>
+        <div class="user-info">
+            <div class="user-nickname" id="header-nickname"></div>
+            <div class="user-balance">
+                <span class="balance-amount" id="header-balance">0</span> FC
+                <div class="add-balance-btn" onclick="showDepositForm()">+</div>
+            </div>
+        </div>
+    </div>
     
     <div class="container">
         <div class="vip-badge">VIP CLUB</div>
@@ -277,7 +446,7 @@
         <div class="welcome-text">
             Добро пожаловать в мир <span class="gold-text">эксклюзивных выигрышей</span>! 
             <span class="emoji">✨</span><br>
-            Готовы испытать удачу и открыть самые <span class="gold-text">дорогие кейсы</span>?
+            Готовы испытать удачу и открыть <span class="gold-text">кейсы</span>?
         </div>
 
         <div id="consent-section" class="section">
@@ -300,16 +469,52 @@
                 <div class="balance"><span id="user-balance">0</span> FC</div>
                 <div class="welcome-text">Удачи в открытиях! <span class="emoji">🎲</span></div>
             </div>
-            <button onclick="showDepositForm()">ПОПОЛНИТЬ БАЛАНС 💰</button>
-            <button onclick="openCases()">ОТКРЫТЬ КЕЙСЫ 🎁</button>
+            <button onclick="showCases()">ОТКРЫТЬ КЕЙСЫ 🎁</button>
             <button onclick="showInventory()">МОЙ ИНВЕНТАРЬ 🎒</button>
+            <button onclick="showWithdraw()">ВЫВОД ПРЕДМЕТОВ 📤</button>
             <div class="thank-you">Спасибо, что выбрали ECasino! <span class="emoji">❤️</span></div>
+        </div>
+
+        <div id="cases-section" class="section" style="display:none;">
+            <div class="welcome-text">🎰 Выберите кейс для открытия</div>
+            <div class="cases-grid">
+                <div class="case-item" onclick="openCase('fc-case')">
+                    <img src="https://i.imgur.com/zg6IO6E.jpeg" alt="FC-CASE" class="case-image">
+                    <div class="case-name">FC-CASE</div>
+                    <div class="case-price">400 FC</div>
+                    <div class="case-chances">💎 100 FC - 30% шанс</div>
+                    <div class="case-chances">💎 300 FC - 25% шанс</div>
+                    <div class="case-chances">💎 450 FC - 25% шанс</div>
+                    <div class="case-chances">💎 500 FC - 15% шанс</div>
+                    <div class="case-chances">💎 1000 FC - 5% шанс</div>
+                </div>
+            </div>
+            <button onclick="backToProfile()">НАЗАД ↩️</button>
+        </div>
+
+        <div id="deposit-section" class="section" style="display:none;">
+            <div class="welcome-text">💎 Пополнение баланса</div>
+            
+            <input type="number" id="deposit-amount" placeholder="Введите сумму FC" oninput="calculateCommission()">
+            
+            <div class="commission-info">
+                <div class="calculation">💡 Комиссия за пополнение: 2%</div>
+                <div class="calculation" id="commission-calculation"></div>
+                <div class="final-amount" id="final-amount"></div>
+            </div>
+
+            <label class="checkbox-label">
+                <input type="checkbox" id="deposit-consent"> 
+                Я понимаю, что получу на баланс сумму за вычетом комиссии
+            </label>
+
+            <button onclick="createDepositOrder()">СОЗДАТЬ ОРДЕР 📋</button>
+            <button onclick="backToProfile()" style="background: #6c757d;">НАЗАД ↩️</button>
         </div>
     </div>
 
     <script src="script.js"></script>
     <script>
-        // Создаем алмазный эффект
         function createDiamondEffect() {
             const effect = document.getElementById('diamond-effect');
             for (let i = 0; i < 20; i++) {
