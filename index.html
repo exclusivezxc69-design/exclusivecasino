@@ -1,376 +1,1102 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-    <title>ECasino | VIP Club</title>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECasino - Элитное Казино</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
-        body {
-            font-family: 'Montserrat', 'Arial', sans-serif;
-            background: linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.9)), url('https://i.imgur.com/mM5QRt9.gif');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            min-height: 100vh;
-            color: #ffffff;
-            padding: 20px;
-            position: relative;
-            overflow-x: hidden;
+
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gold-gradient: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%);
+            --success-gradient: linear-gradient(135deg, #00c851 0%, #007e33 100%);
+            --danger-gradient: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            --card-bg: rgba(255, 255, 255, 0.12);
+            --card-border: rgba(255, 255, 255, 0.18);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.8);
+            --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 25px 50px rgba(0, 0, 0, 0.25);
         }
 
-        .user-header {
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--primary-gradient);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
             position: fixed;
-            top: 20px;
-            right: 20px;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(15px);
-            padding: 15px 20px;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(120, 100, 255, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 120, 120, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(120, 220, 255, 0.2) 0%, transparent 50%);
+            z-index: -1;
+            animation: backgroundPulse 8s ease-in-out infinite alternate;
+        }
+
+        @keyframes backgroundPulse {
+            0% { opacity: 0.8; }
+            100% { opacity: 1; }
+        }
+
+        .app-container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header-section {
+            text-align: center;
+            margin-bottom: 32px;
+            padding: 32px 24px;
+            background: var(--card-bg);
+            border-radius: 24px;
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--card-border);
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(255, 215, 0, 0.1), transparent);
+            animation: rotate 10s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            100% { transform: rotate(360deg); }
+        }
+
+        .app-logo {
+            font-size: 3.2rem;
+            font-weight: 800;
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+            letter-spacing: -0.02em;
+        }
+
+        .app-subtitle {
+            font-size: 1.25rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+            letter-spacing: 0.01em;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 200, 81, 0.15);
+            border: 1px solid rgba(0, 200, 81, 0.3);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #00c851;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #00c851;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .profile-card {
+            background: var(--card-bg);
             border-radius: 20px;
-            border: 2px solid rgba(255, 215, 0, 0.3);
+            padding: 24px;
+            margin-bottom: 28px;
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--card-border);
+            box-shadow: var(--shadow-lg);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .profile-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .profile-header {
             display: flex;
             align-items: center;
-            gap: 15px;
-            z-index: 1000;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .profile-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
         }
 
         .user-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, #ffd700, #4ecdc4);
+            width: 64px;
+            height: 64px;
+            border-radius: 20px;
+            background: var(--gold-gradient);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5em;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .user-info {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-
-        .user-nickname {
-            font-weight: 600;
-            color: #ffd700;
-            font-size: 1.1em;
-        }
-
-        .user-balance {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1.1em;
-        }
-
-        .balance-amount {
+            font-size: 24px;
             font-weight: 700;
-            color: #4ecdc4;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 8px 16px rgba(255, 215, 0, 0.3);
+        }
+
+        .user-details h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .user-details p {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            font-weight: 500;
         }
 
         .add-balance-btn {
-            background: rgba(255, 215, 0, 0.2);
-            border: 2px solid rgba(255, 215, 0, 0.5);
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
+            background: var(--success-gradient);
+            border: none;
+            border-radius: 16px;
+            padding: 12px 20px;
+            color: white;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 12px rgba(0, 200, 81, 0.4);
             display: flex;
             align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 1.2em;
-            font-weight: bold;
+            gap: 8px;
         }
 
         .add-balance-btn:hover {
-            background: rgba(255, 215, 0, 0.4);
-            transform: scale(1.1);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 200, 81, 0.6);
         }
 
-        .container {
-            max-width: 500px;
-            width: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(20px);
-            border-radius: 25px;
-            padding: 40px 30px;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8);
-            border: 3px solid rgba(255, 215, 0, 0.3);
-            position: relative;
-            z-index: 2;
-            margin: 80px auto 40px;
+        .add-balance-btn:active {
+            transform: translateY(0);
         }
 
-        .logo {
-            font-size: 4em;
-            font-weight: 900;
-            margin-bottom: 30px;
-            background: linear-gradient(45deg, #ffd700, #ff6b6b, #4ecdc4, #45b7d1, #ffd700);
-            background-size: 300% 300%;
+        .balance-display {
+            text-align: center;
+            margin: 24px 0;
+        }
+
+        .balance-amount {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: var(--gold-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: gradientText 3s ease-in-out infinite;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+            background-clip: text;
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
         }
 
-        @keyframes gradientText {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        .balance-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            font-weight: 500;
         }
 
-        .welcome-text {
-            font-size: 1.6em;
-            margin-bottom: 35px;
-            line-height: 1.6;
-            opacity: 0;
-            animation: fadeIn 1.2s ease-in forwards 0.5s;
-            font-weight: 300;
-            text-shadow: 0 2px 15px rgba(0,0,0,0.9);
-            color: #e0e0e0;
-        }
-
-        @keyframes fadeIn {
-            to { opacity: 1; }
-        }
-
-        .section {
-            margin: 35px 0;
-            opacity: 0;
-            animation: slideUp 1s ease-out forwards;
-            width: 100%;
-        }
-
-        @keyframes slideUp {
-            from { 
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            to { 
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 24px;
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .cases-grid {
             display: grid;
-            grid-template-columns: 1fr;
-            gap: 25px;
-            margin: 30px 0;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
         }
 
-        .case-item {
-            background: linear-gradient(135deg, rgba(255,215,0,0.1) 0%, rgba(255,107,107,0.08) 100%);
-            border: 3px solid rgba(255, 215, 0, 0.4);
+        .case-card {
+            background: var(--card-bg);
             border-radius: 20px;
-            padding: 25px;
+            padding: 24px;
             text-align: center;
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--card-border);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
         }
 
-        .case-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 45px rgba(255, 215, 0, 0.4);
-            border-color: #ffd700;
+        .case-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 107, 107, 0.1));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .case-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-xl);
+            border-color: rgba(255, 215, 0, 0.5);
+        }
+
+        .case-card:hover::before {
+            opacity: 1;
         }
 
         .case-image {
-            width: 120px;
-            height: 120px;
-            margin: 0 auto 15px;
-            border-radius: 15px;
-            border: 3px solid #ffd700;
-            box-shadow: 0 10px 25px rgba(255, 215, 0, 0.3);
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 16px;
+            margin-bottom: 16px;
+            border: 2px solid var(--card-border);
+            transition: all 0.3s ease;
+        }
+
+        .case-card:hover .case-image {
+            transform: scale(1.05);
+            border-color: rgba(255, 215, 0, 0.5);
         }
 
         .case-name {
-            font-size: 1.4em;
-            font-weight: 700;
-            color: #ffd700;
-            margin: 10px 0;
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 1;
         }
 
         .case-price {
-            font-size: 1.3em;
-            font-weight: 600;
-            color: #4ecdc4;
-            margin: 10px 0;
+            font-size: 1.125rem;
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+            margin-bottom: 16px;
+            position: relative;
+            z-index: 1;
         }
 
-        .case-animation {
+        .open-case-btn {
+            background: var(--danger-gradient);
+            border: none;
+            border-radius: 16px;
+            padding: 14px 32px;
+            color: white;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .open-case-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.6);
+        }
+
+        .inventory-section {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 24px;
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--card-border);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .empty-inventory {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 1rem;
+            padding: 40px 20px;
+        }
+
+        /* Модальные окна */
+        .modal {
+            display: none;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.95);
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: var(--primary-gradient);
+            border-radius: 24px;
+            padding: 32px;
+            max-width: 420px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+            border: 2px solid var(--card-border);
+            box-shadow: var(--shadow-xl);
+            animation: modalSlideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes modalSlideIn {
+            from { 
+                opacity: 0;
+                transform: translateY(30px) scale(0.9);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 20px;
+            font-size: 28px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: all 0.2s ease;
+            width: 32px;
+            height: 32px;
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 10000;
-            flex-direction: column;
+            border-radius: 50%;
         }
 
-        .spinning-item {
-            font-size: 4em;
-            animation: spin 0.1s linear infinite;
+        .modal-close:hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.1);
         }
 
-        @keyframes spin {
-            0% { transform: translateY(100px) rotate(0deg); opacity: 0; }
-            50% { transform: translateY(0) rotate(180deg); opacity: 1; }
-            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        .modal h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        .result-item {
-            font-size: 3em;
-            margin-top: 30px;
-            animation: reveal 1s ease-out;
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
         }
 
-        @keyframes reveal {
-            0% { transform: scale(0); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-secondary);
         }
 
-        .result-buttons {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .result-btn {
-            padding: 12px 25px;
-            border: none;
-            border-radius: 10px;
-            font-weight: 600;
-            cursor: pointer;
+        .form-input {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid var(--card-border);
+            border-radius: 12px;
+            background: var(--card-bg);
+            color: var(--text-primary);
+            font-size: 16px;
+            backdrop-filter: blur(10px);
             transition: all 0.3s ease;
         }
 
-        .sell-btn {
-            background: #4ecdc4;
-            color: #000;
+        .form-input::placeholder {
+            color: var(--text-secondary);
         }
 
-        .withdraw-btn {
-            background: #ffd700;
-            color: #000;
+        .form-input:focus {
+            outline: none;
+            border-color: #ffd700;
+            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
         }
 
-        .inventory-section {
-            display: none;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(15px);
-            border: 2px solid rgba(255, 215, 0, 0.3);
-            border-radius: 15px;
-            padding: 20px;
-            position: absolute;
-            top: 70px;
-            right: 20px;
-            z-index: 1001;
-            min-width: 200px;
-        }
-
-        .inventory-item {
-            padding: 10px;
-            border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+        .checkbox-group {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            align-items: flex-start;
+            gap: 12px;
+            margin: 24px 0;
+            text-align: left;
         }
 
-        .item-actions {
-            display: flex;
-            gap: 10px;
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: #ffd700;
+            margin-top: 2px;
         }
 
-        .action-btn {
-            padding: 5px 10px;
+        .checkbox-group label {
+            font-size: 0.875rem;
+            line-height: 1.4;
+            color: var(--text-secondary);
+        }
+
+        .submit-btn {
+            background: var(--gold-gradient);
             border: none;
-            border-radius: 5px;
-            font-size: 0.8em;
+            border-radius: 16px;
+            padding: 16px 32px;
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
             cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
+            width: 100%;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 215, 0, 0.6);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .agreement-text {
+            text-align: left;
+            margin: 20px 0;
+            line-height: 1.6;
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid var(--card-border);
+        }
+
+        .info-text {
+            margin-top: 24px;
+            padding: 16px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            border: 1px solid var(--card-border);
+        }
+
+        .info-text p {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .info-text p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Анимации */
+        .success-animation {
+            animation: successPulse 0.6s ease-in-out;
+        }
+
+        @keyframes successPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .error-shake {
+            animation: errorShake 0.5s ease-in-out;
+        }
+
+        @keyframes errorShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            75% { transform: translateX(8px); }
+        }
+
+        /* Плавающие частицы */
+        .floating-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 215, 0, 0.6);
+            border-radius: 50%;
+            animation: floatUp 8s infinite linear;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-10vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .app-container {
+                padding: 16px;
+            }
+            
+            .cases-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            
+            .app-logo {
+                font-size: 2.5rem;
+            }
+            
+            .balance-amount {
+                font-size: 2rem;
+            }
+
+            .modal-content {
+                padding: 24px;
+                margin: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .profile-header {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+
+            .add-balance-btn {
+                align-self: stretch;
+                justify-content: center;
+            }
         }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="user-header" id="user-header" style="display: none;">
-        <div class="user-avatar" id="user-avatar" onclick="toggleInventory()">👤</div>
-        <div class="user-info">
-            <div class="user-nickname" id="header-nickname"></div>
-            <div class="user-balance">
-                <span class="balance-amount" id="header-balance">0</span> FC
-                <div class="add-balance-btn" onclick="showDepositForm()">+</div>
+    <div class="floating-particles" id="particles"></div>
+    
+    <div class="app-container">
+        <!-- Заголовок приложения -->
+        <div class="header-section">
+            <div class="app-logo">🎰 ECASINO</div>
+            <div class="app-subtitle">Премиум казино с Fun Coins</div>
+            <div class="status-badge">
+                <div class="status-dot"></div>
+                Онлайн
             </div>
         </div>
-    </div>
 
-    <div class="inventory-section" id="inventory-section">
-        <h3>🎒 Мой инвентарь</h3>
-        <div id="inventory-items">
-            <div class="inventory-item">Инвентарь пуст</div>
-        </div>
-    </div>
-    
-    <div class="container">
-        <div class="logo">🎰 ECASINO</div>
-        
-        <div id="consent-section" class="section">
-            <label class="checkbox-label">
-                <input type="checkbox" id="consent"> 
-                Я согласен с правилами и понимаю риски
-            </label>
-            <button onclick="acceptConsent()">НАЧАТЬ ИГРУ 🚀</button>
-        </div>
-
-        <div id="nickname-section" class="section" style="display:none;">
-            <input type="text" id="nickname" placeholder="Введите ваш игровой никнейм">
-            <button onclick="submitNickname()">СОХРАНИТЬ</button>
+        <!-- Карточка профиля -->
+        <div class="profile-card">
+            <div class="profile-header">
+                <div class="profile-info">
+                    <div class="user-avatar" id="userAvatar">👤</div>
+                    <div class="user-details">
+                        <h3 id="userName">Загрузка...</h3>
+                        <p>Игрок ECasino</p>
+                    </div>
+                </div>
+                <button class="add-balance-btn" onclick="openReplenishModal()">
+                    💰 +
+                </button>
+            </div>
+            
+            <div class="balance-display">
+                <div class="balance-amount" id="userBalance">0 FC</div>
+                <div class="balance-label">Ваш баланс</div>
+            </div>
         </div>
 
-        <div id="main-section" class="section" style="display:none;">
-            <div class="cases-grid">
-                <div class="case-item" onclick="openCase('fc-case')">
-                    <img src="https://i.imgur.com/zg6IO6E.jpeg" alt="FC-CASE" class="case-image">
-                    <div class="case-name">FC-CASE</div>
-                    <div class="case-price">400 FC</div>
+        <!-- Секция кейсов -->
+        <div class="section-title">🎲 Доступные кейсы</div>
+        <div class="cases-grid" id="casesGrid">
+            <!-- Кейсы загружаются динамически -->
+        </div>
+
+        <!-- Инвентарь -->
+        <div class="inventory-section">
+            <div class="section-title">🎒 Мой инвентарь</div>
+            <div id="inventoryItems">
+                <div class="empty-inventory">
+                    Инвентарь пуст. Откройте кейсы, чтобы получить предметы!
                 </div>
             </div>
         </div>
+    </div>
 
-        <div id="deposit-section" class="section" style="display:none;">
-            <div class="welcome-text">💎 Пополнение баланса</div>
-            
-            <input type="number" id="deposit-amount" placeholder="Введите сумму FC" oninput="calculateCommission()">
-            
-            <div id="commission-calculation"></div>
-            <div id="final-amount"></div>
-
-            <label class="checkbox-label">
-                <input type="checkbox" id="deposit-consent"> 
-                Я понимаю, что получу на баланс сумму за вычетом комиссии
-            </label>
-
-            <button onclick="createDepositOrder()">СОЗДАТЬ ОРДЕР</button>
-            <button onclick="backToMain()">НАЗАД</button>
+    <!-- Модальное окно согласия -->
+    <div class="modal" id="agreementModal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeAgreementModal()">&times;</span>
+            <h2>🎰 Добро пожаловать в ECasino!</h2>
+            <div class="agreement-text">
+                <p><strong>🎮 Правила использования:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 12px;">
+                    <li>FC (Fun Coins) - это внутриигровая валюта без реальной стоимости</li>
+                    <li>FC нельзя купить или продать за реальные деньги</li>
+                    <li>Вы можете потерять все FC в процессе игры</li>
+                    <li>Казино предназначено только для развлечения</li>
+                    <li>Администрация не несет ответственности за потерю FC</li>
+                    <li>Играйте ответственно и в свое удовольствие!</li>
+                </ul>
+                <p style="margin-top: 16px; font-weight: 600;">💡 Удачи в игре!</p>
+            </div>
+            <div class="checkbox-group">
+                <input type="checkbox" id="agreeCheckbox">
+                <label for="agreeCheckbox">Я согласен с правилами и понимаю все риски</label>
+            </div>
+            <button class="submit-btn" id="startGameBtn" onclick="startGame()" disabled>
+                🚀 НАЧАТЬ ИГРУ
+            </button>
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <!-- Модальное окно пополнения -->
+    <div class="modal" id="replenishModal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeReplenishModal()">&times;</span>
+            <h2>💎 Пополнение баланса</h2>
+            
+            <div class="form-group">
+                <label for="replenishAmount">Сумма пополнения (FC)</label>
+                <input type="number" 
+                       id="replenishAmount" 
+                       class="form-input" 
+                       placeholder="Введите сумму от 1 до 50,000 FC" 
+                       min="1" 
+                       max="50000">
+            </div>
+            
+            <div class="checkbox-group">
+                <input type="checkbox" id="feeAgreeCheckbox">
+                <label for="feeAgreeCheckbox">
+                    Я понимаю, что при передаче неточной суммы средства возвращаются с комиссией 20%
+                </label>
+            </div>
+            
+            <button class="submit-btn" id="createOrderBtn" onclick="createOrder()" disabled>
+                ✨ СОЗДАТЬ ОРДЕР
+            </button>
+
+            <div class="info-text">
+                <p><strong>📋 Как происходит пополнение:</strong></p>
+                <p>1️⃣ Создайте ордер с нужной суммой</p>
+                <p>2️⃣ Дождитесь подтверждения администратора</p>
+                <p>3️⃣ Зайдите в игру и найдите ExclusiveBot</p>
+                <p>4️⃣ Передайте точную сумму FC</p>
+                <p>5️⃣ Подтвердите передачу в боте</p>
+                <p>6️⃣ Получите FC на баланс после проверки</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Инициализация Telegram Web App
+        const tg = window.Telegram.WebApp;
+        
+        // Глобальные данные
+        let userData = {
+            id: null,
+            username: '',
+            balance: 0,
+            hasAgreed: false
+        };
+
+        // Данные кейсов
+        const gameCases = [
+            {
+                id: 1,
+                name: 'FC-CASE Premium',
+                price: 400,
+                image: 'https://i.imgur.com/zg6IO6E.jpeg',
+                items: ['1000 FC', '500 FC', '200 FC', '100 FC']
+            },
+            {
+                id: 2,
+                name: 'Golden Case',
+                price: 800,
+                image: 'https://i.imgur.com/golden.jpeg',
+                items: ['2000 FC', '1000 FC', '500 FC', '300 FC']
+            }
+        ];
+
+        // Инициализация при загрузке
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeApp();
+            createFloatingParticles();
+            setupEventListeners();
+        });
+
+        function initializeApp() {
+            try {
+                tg.ready();
+                tg.expand();
+                
+                // Настройка темы
+                if (tg.colorScheme === 'dark') {
+                    document.documentElement.style.setProperty('--primary-gradient', 
+                        'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)');
+                }
+
+                // Получение данных пользователя
+                if (tg.initDataUnsafe?.user) {
+                    userData.id = tg.initDataUnsafe.user.id;
+                    userData.username = tg.initDataUnsafe.user.username || 
+                                      tg.initDataUnsafe.user.first_name || 'Игрок';
+                } else {
+                    userData.username = 'Демо игрок';
+                    userData.id = 12345; // Демо ID
+                }
+
+                // Проверка согласия
+                const hasAgreed = localStorage.getItem('ecasino_agreed');
+                if (!hasAgreed) {
+                    showAgreementModal();
+                } else {
+                    userData.hasAgreed = true;
+                    loadUserInterface();
+                }
+
+                // Настройка главной кнопки Telegram
+                tg.MainButton.text = 'ЗАКРЫТЬ';
+                tg.MainButton.show();
+                tg.MainButton.onClick(() => tg.close());
+
+            } catch (error) {
+                console.error('Ошибка инициализации:', error);
+                // Fallback для тестирования вне Telegram
+                userData.username = 'Тестовый игрок';
+                userData.id = 12345;
+                loadUserInterface();
+            }
+        }
+
+        function setupEventListeners() {
+            // Checkbox согласия
+            document.getElementById('agreeCheckbox').addEventListener('change', function() {
+                document.getElementById('startGameBtn').disabled = !this.checked;
+            });
+
+            // Checkbox комиссии
+            document.getElementById('feeAgreeCheckbox').addEventListener('change', updateOrderButton);
+
+            // Поле суммы пополнения
+            document.getElementById('replenishAmount').addEventListener('input', updateOrderButton);
+
+            // Закрытие модальных окон по клику вне них
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('modal')) {
+                    closeAllModals();
+                }
+            });
+        }
+
+        function updateOrderButton() {
+            const amount = parseInt(document.getElementById('replenishAmount').value);
+            const feeChecked = document.getElementById('feeAgreeCheckbox').checked;
+            document.getElementById('createOrderBtn').disabled = !(feeChecked && amount > 0 && amount <= 50000);
+        }
+
+        function loadUserInterface() {
+            // Обновление данных пользователя
+            document.getElementById('userName').textContent = userData.username;
+            document.getElementById('userAvatar').textContent = userData.username.charAt(0).toUpperCase();
+            document.getElementById('userBalance').textContent = userData.balance.toLocaleString() + ' FC';
+            
+            // Загрузка кейсов
+            loadGameCases();
+        }
+
+        function loadGameCases() {
+            const casesGrid = document.getElementById('casesGrid');
+            casesGrid.innerHTML = '';
+
+            gameCases.forEach(caseItem => {
+                const caseCard = document.createElement('div');
+                caseCard.className = 'case-card';
+                caseCard.innerHTML = `
+                    <img src="${caseItem.image}" 
+                         alt="${caseItem.name}" 
+                         class="case-image" 
+                         onerror="this.style.display='none'">
+                    <div class="case-name">${caseItem.name}</div>
+                    <div class="case-price">${caseItem.price.toLocaleString()} FC</div>
+                    <button class="open-case-btn" onclick="openCase(${caseItem.id})">
+                        ОТКРЫТЬ КЕЙС
+                    </button>
+                `;
+                casesGrid.appendChild(caseCard);
+            });
+        }
+
+        function showAgreementModal() {
+            document.getElementById('agreementModal').style.display = 'flex';
+        }
+
+        function closeAgreementModal() {
+            if (userData.hasAgreed) {
+                document.getElementById('agreementModal').style.display = 'none';
+            }
+        }
+
+        function startGame() {
+            const checkbox = document.getElementById('agreeCheckbox');
+            if (checkbox.checked) {
+                userData.hasAgreed = true;
+                localStorage.setItem('ecasino_agreed', 'true');
+                closeAgreementModal();
+                loadUserInterface();
+                showNotification('✅ Добро пожаловать в ECasino!', 'success');
+            }
+        }
+
+        function openReplenishModal() {
+            if (!userData.hasAgreed) {
+                showNotification('❌ Сначала примите условия соглашения', 'error');
+                return;
+            }
+            document.getElementById('replenishModal').style.display = 'flex';
+        }
+
+        function closeReplenishModal() {
+            document.getElementById('replenishModal').style.display = 'none';
+            document.getElementById('replenishAmount').value = '';
+            document.getElementById('feeAgreeCheckbox').checked = false;
+            document.getElementById('createOrderBtn').disabled = true;
+        }
+
+        function closeAllModals() {
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.style.display = 'none';
+            });
+        }
+
+        function createOrder() {
+            const amount = parseInt(document.getElementById('replenishAmount').value);
+            
+            if (!amount || amount <= 0) {
+                showNotification('❌ Введите корректную сумму', 'error');
+                return;
+            }
+
+            if (amount > 50000) {
+                showNotification('❌ Максимальная сумма: 50,000 FC', 'error');
+                return;
+            }
+
+            // Подготовка данных для отправки
+            const orderData = {
+                action: 'create_order',
+                amount: amount,
+                user_id: userData.id,
+                username: userData.username
+            };
+
+            try {
+                // Отправка данных через Telegram Web App API
+                tg.sendData(JSON.stringify(orderData));
+                
+                closeReplenishModal();
+                showNotification(`✅ Ордер на ${amount.toLocaleString()} FC создан! Проверьте сообщения в боте.`, 'success');
+                
+            } catch (error) {
+                console.error('Ошибка отправки данных:', error);
+                showNotification('❌ Ошибка при создании ордера. Попробуйте снова.', 'error');
+            }
+        }
+
+        function openCase(caseId) {
+            if (!userData.hasAgreed) {
+                showNotification('❌ Сначала примите условия соглашения', 'error');
+                return;
+            }
+
+            const caseItem = gameCases.find(c => c.id === caseId);
+            if (!caseItem) return;
+
+            if (userData.balance < caseItem.price) {
+                showNotification(`❌ Недостаточно FC! Нужно: ${caseItem.price.toLocaleString()} FC`, 'error');
+                return;
+            }
+
+            // Анимация открытия кейса
+            const caseCard = event.target.closest('.case-card');
+            caseCard.style.transform = 'scale(0.95)';
+            
+            setTimeout(() => {
+                // Симуляция открытия кейса
+                const rewards = [100, 200, 500, 1000, 2000];
+                const randomReward = rewards[Math.floor(Math.random() * rewards.length)];
+                
+                userData.balance -= caseItem.price;
+                userData.balance += randomReward;
+                
+                document.getElementById('userBalance').textContent = userData.balance.toLocaleString() + ' FC';
+                
+                caseCard.style.transform = 'scale(1)';
+                caseCard.classList.add('success-animation');
+                
+                showNotification(`🎉 Поздравляем! Вы выиграли ${randomReward.toLocaleString()} FC!`, 'success');
+                
+                setTimeout(() => {
+                    caseCard.classList.remove('success-animation');
+                }, 600);
+            }, 200);
+        }
+
+        function createFloatingParticles() {
+            const particlesContainer = document.getElementById('particles');
+            
+            function createParticle() {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDuration = (Math.random() * 4 + 6) + 's';
+                particle.style.animationDelay = Math.random() * 2 + 's';
+                
+                particlesContainer.appendChild(particle);
+                
+                setTimeout(() => {
+                    if (particle.parentNode) {
+                        particle.remove();
+                    }
+                }, 10000);
+            }
+
+            // Создание частиц с интервалом
+            setInterval(() => {
+                if (Math.random() > 0.7) {
+                    createParticle();
+                }
+            }, 800);
+        }
+
+        function showNotification(message, type = 'info') {
+            try {
+                // Используем встроенные уведомления Telegram
+                if (typeof tg !== 'undefined' && tg.showAlert) {
+                    tg.showAlert(message);
+                } else {
+                    alert(message);
+                }
+                
+                // Добавляем визуальную обратную связь
+                if (type === 'error') {
+                    document.body.classList.add('error-shake');
+                    setTimeout(() => {
+                        document.body.classList.remove('error-shake');
+                    }, 500);
+                }
+            } catch (error) {
+                console.error('Ошибка показа уведомления:', error);
+                alert(message);
+            }
+        }
+
+        // Обработка изменений темы Telegram
+        if (typeof tg !== 'undefined') {
+            tg.onEvent('theme_changed', function() {
+                const isDark = tg.colorScheme === 'dark';
+                if (isDark) {
+                    document.documentElement.style.setProperty('--primary-gradient', 
+                        'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)');
+                } else {
+                    document.documentElement.style.setProperty('--primary-gradient', 
+                        'linear-gradient(135deg, #667eea 0%, #764ba2 100%)');
+                }
+            });
+        }
+
+        // Предзагрузка изображений для лучшей производительности
+        function preloadImages() {
+            gameCases.forEach(caseItem => {
+                const img = new Image();
+                img.src = caseItem.image;
+            });
+        }
+
+        // Запуск предзагрузки
+        preloadImages();
+    </script>
 </body>
 </html>
