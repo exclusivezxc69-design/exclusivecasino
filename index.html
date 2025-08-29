@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ExclusiveCasino (EC)</title>
+    <meta charset="utf-8">
+</head>
+<body>
+<h2>Добро пожаловать в ExclusiveCasino (EC)!</h2>
+
+<div id="consent-section">
+    <input type="checkbox" id="consent"> Я согласен, что могу проиграть внутриигровую валюту (FC)
+    <button onclick="acceptConsent()">Продолжить</button>
+</div>
+
+<div id="nickname-section" style="display:none;">
+    Введите ваш игровой ник: <input type="text" id="nickname">
+    <button onclick="submitNickname()">Сохранить</button>
+</div>
+
+<div id="profile-section" style="display:none;">
+    <h3>Профиль</h3>
+    Никнейм: <span id="user-nick"></span><br>
+    Баланс: <span id="user-balance">0</span> FC<br>
+    <button onclick="depositFC()">Пополнить (+)</button>
+    <div id="cases-list">
+        <h3>Кейсы</h3>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
