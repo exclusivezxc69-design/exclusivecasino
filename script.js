@@ -1,5 +1,7 @@
 let currentUser = null;
 let userBalance = 0;
+let userInventory = [];
+let currentWin = 0;
 
 const casesData = {
     'fc-case': {
@@ -15,16 +17,13 @@ const casesData = {
     }
 };
 
-let gameLogs = [];
-
 function acceptConsent() {
     const checkbox = document.getElementById("consent");
     if (checkbox.checked) {
         document.getElementById("consent-section").style.display = "none";
         document.getElementById("nickname-section").style.display = "block";
-        showNotification("🎉 Благодарим за согласие! Приятной игры в ECasino!");
     } else {
-        showNotification("⚠️ Пожалуйста, подтвердите согласие для продолжения");
+        showNotification("Пожалуйста, подтвердите согласие");
     }
 }
 
@@ -33,65 +32,84 @@ function submitNickname() {
     const nickname = nicknameInput.value.trim();
     
     if (!nickname) {
-        showNotification("✏️ Введите ваш игровой никнейм");
-        nicknameInput.focus();
-        return;
-    }
-    
-    if (nickname.length < 3) {
-        showNotification("📝 Никнейм должен содержать минимум 3 символа");
-        nicknameInput.focus();
+        showNotification("Введите ваш игровой никнейм");
         return;
     }
     
     currentUser = nickname;
     document.getElementById("nickname-section").style.display = "none";
-    document.getElementById("profile-section").style.display = "block";
-    
-    document.getElementById("user-nick").innerText = nickname;
+    document.getElementById("main-section").style.display = "block";
+    document.getElementById("user-header").style.display = "flex";
     document.getElementById("header-nickname").innerText = nickname;
     
-    document.getElementById("user-header").style.display = "flex";
-    
-    userBalance = 0;
+    loadUserData();
+    showNotification("Добро пожаловать в ECasino!");
+}
+
+function loadUserData() {
+    const savedData = localStorage.getItem(`ecasino_${currentUser}`);
+    if (savedData) {
+        const data = JSON.parse(savedData);
+        userBalance = data.balance || 0;
+        userInventory = data.inventory || [];
+    }
     updateBalance(userBalance);
-    
-    showNotification("✅ Никнейм сохранен! Добро пожаловать в ECasino!");
+    updateInventory();
+}
+
+function saveUserData() {
+    const data = {
+        balance: userBalance,
+        inventory: userInventory
+    };
+    localStorage.setItem(`ecasino_${currentUser}`, JSON.stringify(data));
 }
 
 function updateBalance(newBalance) {
     userBalance = newBalance;
     document.getElementById("user-balance").innerText = userBalance;
     document.getElementById("header-balance").innerText = userBalance;
+    saveUserData();
+}
+
+function updateInventory() {
+    const inventoryContainer = document.getElementById("inventory-items");
+    if (userInventory.length === 0) {
+        inventoryContainer.innerHTML = '<div class="inventory-item">Инвентарь пуст</div>';
+        return;
+    }
+    
+    inventoryContainer.innerHTML = '';
+    userInventory.forEach((item, index) => {
+        const itemElement = document.createElement('div');
+        itemElement.className = 'inventory-item';
+        itemElement.innerHTML = `
+            <span>${item.amount} FC</span>
+            <div class="item-actions">
+                <button class="action-btn sell-btn" onclick="sellItem(${index})">💰</button>
+                <button class="action-btn withdraw-btn" onclick="withdrawItem(${index})">📤</button>
+            </div>
+        `;
+        inventoryContainer.appendChild(itemElement);
+    });
+}
+
+function toggleInventory() {
+    const inventory = document.getElementById("inventory-section");
+    inventory.style.display = inventory.style.display === 'none' ? 'block' : 'none';
 }
 
 function showDepositForm() {
-    document.getElementById("profile-section").style.display = "none";
+    document.getElementById("main-section").style.display = "none";
     document.getElementById("deposit-section").style.display = "block";
     document.getElementById("deposit-amount").value = "";
     document.getElementById("deposit-consent").checked = false;
     calculateCommission();
 }
 
-function showCases() {
-    document.getElementById("profile-section").style.display = "none";
-    document.getElementById("cases-section").style.display = "block";
-}
-
-function showInventory() {
-    showNotification("🎒 Инвентарь будет доступен после открытия кейсов!");
-}
-
-function showWithdraw() {
-    showNotification("📤 Вывод предметов будет доступен после выигрыша!");
-}
-
-function backToProfile() {
-    const sections = ['cases-section', 'deposit-section', 'inventory-section', 'withdraw-section'];
-    sections.forEach(section => {
-        document.getElementById(section).style.display = 'none';
-    });
-    document.getElementById("profile-section").style.display = "block";
+function backToMain() {
+    document.getElementById("deposit-section").style.display = "none";
+    document.getElementById("main-section").style.display = "block";
 }
 
 function calculateCommission() {
@@ -100,10 +118,10 @@ function calculateCommission() {
     const finalAmount = amount - commission;
     
     document.getElementById("commission-calculation").innerHTML = 
-        `📊 Комиссия ECasino: <strong>${commission} FC</strong> (2% от ${amount} FC)`;
+        `Комиссия: ${commission} FC (2%)`;
     
     document.getElementById("final-amount").innerHTML = 
-        `🎯 Вы получите: <strong>${finalAmount} FC</strong> на баланс`;
+        `К зачислению: ${finalAmount} FC`;
 }
 
 function createDepositOrder() {
@@ -111,40 +129,30 @@ function createDepositOrder() {
     const consent = document.getElementById("deposit-consent").checked;
     
     if (!amount || amount <= 0) {
-        showNotification("🔢 Пожалуйста, введите корректную сумму");
+        showNotification("Введите корректную сумму");
         return;
     }
     
     if (!consent) {
-        showNotification("✅ Пожалуйста, подтвердите понимание комиссии");
+        showNotification("Подтвердите понимание комиссии");
         return;
     }
     
     const commission = Math.floor(amount * 0.02);
     const finalAmount = amount - commission;
     
-    showNotification(
-        `💎 Создан ордер на ${amount} FC\n` +
-        `📉 Комиссия: ${commission} FC (2%)\n` +
-        `🎯 К зачислению: ${finalAmount} FC\n\n` +
-        `⏳ Ожидайте подтверждения администратора!`
-    );
+    showNotification(`Создан ордер на ${amount} FC. Ожидайте подтверждения.`);
     
     setTimeout(() => {
-        backToProfile();
+        backToMain();
     }, 3000);
 }
 
 function openCase(caseType) {
     const caseData = casesData[caseType];
     
-    if (!caseData) {
-        showNotification("❌ Ошибка: кейс не найден");
-        return;
-    }
-    
     if (userBalance < caseData.price) {
-        showNotification(`❌ Недостаточно FC для открытия кейса!\n💎 Нужно: ${caseData.price} FC`);
+        showNotification(`Недостаточно FC. Нужно: ${caseData.price} FC`);
         return;
     }
     
@@ -163,21 +171,16 @@ function startCaseAnimation(caseData) {
     document.body.appendChild(animation);
     
     setTimeout(() => {
-        const winAmount = calculateWin(caseData.items);
+        currentWin = calculateWin(caseData.items);
         
         animation.innerHTML = `
             <div class="result-item">🎉 ВЫ ВЫИГРАЛИ!</div>
-            <div class="result-item">${winAmount} FC 💎</div>
-            <div class="result-item">🎊 Поздравляем!</div>
+            <div class="result-item">${currentWin} FC</div>
+            <div class="result-buttons">
+                <button class="result-btn sell-btn" onclick="sellWin()">💰 Продать</button>
+                <button class="result-btn withdraw-btn" onclick="withdrawWin()">📤 В инвентарь</button>
+            </div>
         `;
-        
-        updateBalance(userBalance + winAmount);
-        addToGameLogs(caseData.name, winAmount);
-        
-        setTimeout(() => {
-            document.body.removeChild(animation);
-            showNotification(`🎊 Поздравляем! Вы выиграли ${winAmount} FC!`);
-        }, 5000);
     }, 3000);
 }
 
@@ -191,22 +194,33 @@ function calculateWin(items) {
             return item.amount;
         }
     }
-    
     return items[0].amount;
 }
 
-function addToGameLogs(caseName, winAmount) {
-    const logEntry = {
-        timestamp: new Date().toLocaleString(),
-        username: currentUser,
-        case: caseName,
-        amount: winAmount
-    };
-    
-    gameLogs.unshift(logEntry);
-    if (gameLogs.length > 100) {
-        gameLogs = gameLogs.slice(0, 100);
-    }
+function sellWin() {
+    updateBalance(userBalance + currentWin);
+    document.querySelector('.case-animation').remove();
+    showNotification(`Продано за ${currentWin} FC!`);
+}
+
+function withdrawWin() {
+    userInventory.push({ amount: currentWin });
+    updateInventory();
+    saveUserData();
+    document.querySelector('.case-animation').remove();
+    showNotification(`Добавлено в инвентарь: ${currentWin} FC`);
+}
+
+function sellItem(index) {
+    const item = userInventory[index];
+    updateBalance(userBalance + item.amount);
+    userInventory.splice(index, 1);
+    updateInventory();
+    showNotification(`Продано за ${item.amount} FC`);
+}
+
+function withdrawItem(index) {
+    showNotification("Вывод предметов временно недоступен");
 }
 
 function showNotification(message) {
@@ -221,40 +235,15 @@ function showNotification(message) {
         padding: 15px 25px;
         border-radius: 15px;
         border: 2px solid rgba(255, 215, 0, 0.3);
-        backdrop-filter: blur(10px);
         z-index: 1000;
         font-size: 1.1em;
-        font-weight: 500;
         text-align: center;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
-        animation: slideIn 0.3s ease-out;
     `;
     
     toast.innerHTML = message;
     document.body.appendChild(toast);
     
     setTimeout(() => {
-        toast.style.animation = 'slideOut 0.3s ease-in';
-        setTimeout(() => document.body.removeChild(toast), 300);
+        document.body.removeChild(toast);
     }, 3000);
 }
-
-document.addEventListener('DOMContentLoaded', function() {
-    const observer = new MutationObserver(function(mutations) {
-        mutations.forEach(function(mutation) {
-            if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
-                const nicknameSection = document.getElementById('nickname-section');
-                if (nicknameSection.style.display === 'block') {
-                    document.getElementById('nickname').focus();
-                }
-            }
-        });
-    });
-    
-    observer.observe(document.getElementById('nickname-section'), {
-        attributes: true,
-        attributeFilter: ['style']
-    });
-    
-    showNotification("🎰 Добро пожаловать в ECasino! Готовы к большим выигрышам?");
-});
